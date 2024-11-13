@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie Prediction</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;  /* Smaller width */
+            text-align: center;
+        }
+
+        h2 {
+            color: #2e3a59;
+            font-size: 24px;  /* Smaller font size */
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;  /* Reduced gap between form elements */
+        }
+
+        label {
+            font-size: 14px;  /* Smaller font size for labels */
+            color: #333;
+            text-align: left;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            padding: 8px;  /* Reduced padding */
+            font-size: 14px;  /* Smaller font size */
+            border: 1px solid #ddd;
+            border-radius: 6px;  /* Smaller border radius */
+            width: 100%;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            border-color: #4CAF50;
+        }
+
+        button {
+            padding: 10px;  /* Reduced padding */
+            font-size: 16px;  /* Smaller font size */
+            color: white;
+            background-color: #4CAF50;
+            border: none;
+            border-radius: 6px;  /* Smaller border radius */
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 16px;  /* Smaller font size for the result */
+            font-weight: 700;
+            color: #2e3a59;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Calorie Prediction</h2>
+        <form id="calorieForm">
+            <label for="gender">Gender:</label>
+            <select id="gender" required>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+
+            <label for="age">Age:</label>
+            <input type="number" id="age" required>
+
+            <label for="height">Height (cm):</label>
+            <input type="number" id="height" required>
+
+            <label for="weight">Weight (kg):</label>
+            <input type="number" id="weight" required>
+
+            <label for="duration">Duration (min):</label>
+            <input type="number" id="duration" required>
+
+            <label for="heart_rate">Heart Rate (bpm):</label>
+            <input type="number" id="heart_rate" required>
+
+            <label for="body_temp">Body Temperature (°C):</label>
+            <input type="number" id="body_temp" required>
+
+            <button type="submit">Predict Calories</button>
+        </form>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('calorieForm').onsubmit = async function(event) {
+            event.preventDefault();
+            const data = {
+                Gender: document.getElementById('gender').value,
+                Age: parseFloat(document.getElementById('age').value),
+                Height: parseFloat(document.getElementById('height').value),
+                Weight: parseFloat(document.getElementById('weight').value),
+                Duration: parseFloat(document.getElementById('duration').value),
+                Heart_Rate: parseFloat(document.getElementById('heart_rate').value),
+                Body_Temp: parseFloat(document.getElementById('body_temp').value)
+            };
+
+            const response = await fetch('/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            document.getElementById('result').innerText = `Estimated Calories Burned: ${result.calories.toFixed(2)}`;
+        };
+    </script>
+</body>
+</html>

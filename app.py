@@ -60,9 +60,6 @@ def predict():
     features_scaled = scaler.transform(features)
     
 
-    # Make prediction
-    # predicted_calories = model.predict(features_scaled)[0][0]
-    # features_dmatrix = DMatrix(features_scaled)
     features_dmatrix = DMatrix(features_scaled, feature_names=['Gender', 'Age', 'Height', 'Weight', 'Duration', 'Heart_Rate', 'Body_Temp'])
     predicted_calories = model.predict(features_dmatrix)[0]
     # print(features.columns)
